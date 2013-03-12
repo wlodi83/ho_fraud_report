@@ -94,10 +94,10 @@ hash = parser.parse(json)
 hash["response"]["data"]["data"].each do |offer|
   
   offer_info = Requester.make_request(
-    url,
+    config["url"],
     {
-    "NetworkId" => network_id,
-    "NetworkToken" => network_token,
+    "NetworkId" => config["network_id"],
+    "NetworkToken" => config["network_token"],
     "Target" => "Offer",
     "Method" => "findById",
     "id" => offer["Offer"]["id"]
@@ -112,10 +112,10 @@ hash["response"]["data"]["data"].each do |offer|
   oh = offer_hash["response"]["data"]["Offer"]
 
   advertiser_info = Requester.make_request(
-    url,
+    config["url"],
     {
-    "NetworkId" => network_id,
-    "NetworkToken" => network_token,
+    "NetworkId" => config["network_id"],
+    "NetworkToken" => config["network_token"],
     "Target" => "Advertiser",
     "Method" => "findById",
     "id" => oh["advertiser_id"]
@@ -130,10 +130,10 @@ hash["response"]["data"]["data"].each do |offer|
   ah = advertiser_hash["response"]["data"]["Advertiser"]
 
   status_info = Requester.make_request(
-    url,
+    config["url"],
     {
-    "NetworkId" => network_id,
-    "NetworkToken" => network_token,
+    "NetworkId" => config["network_id"],
+    "NetworkToken" => config["network_token"],
     "Target" => "Report",
     "Method" => "getConversions",
     "fields[0]" => "Stat.affiliate_info4",
@@ -199,7 +199,7 @@ hash["response"]["data"]["data"].each do |offer|
       if v.to_f > 20 and !k.empty?
         app_query = "select app.name from cms.applications as app where app.id = '#{k}'"
 
-        app_result = EXASOL.execute_query(app_query)[0][0]
+        app_result = Exasol.execute_query(app_query)[0][0]
 
         if app_result.nil?
           status_res << "#{v}% from application #{k}, "
